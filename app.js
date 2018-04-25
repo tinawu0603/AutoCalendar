@@ -538,4 +538,28 @@ $(function() {
         var date = new Date(datetime);
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     });
+
+    // "2017-04-01T01:00:00"
+    function getMonthStart() {
+        var today = new Date();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        return yyyy + '-' + mm + '-01T01:00:00';
+    }
+
+    function getMonthEnd() {
+        var today = new Date();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        return yyyy + '-' + mm + '-31T23:00:00';
+    }
+
+    function getWeekStart() {
+        
+
+    }
+
+    function getWeekEnd() {
+
+    }
 });
