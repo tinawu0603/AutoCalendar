@@ -1,7 +1,7 @@
 $(function() {
     // App configuration
     var authEndpoint = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?';
-    var redirectUri = 'http://tinawu0603.github.io/AutoCalendar';
+    var redirectUri = 'http://localhost:8080';
     var appId = '3be8622a-f6a4-491c-afe3-8861f2c6e230';
     var scopes = 'openid profile User.Read Mail.Read Calendars.Read Calendars.Read.Shared Calendars.ReadWrite Calendars.ReadWrite.Shared Contacts.Read';
 
