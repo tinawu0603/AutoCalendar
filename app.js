@@ -102,6 +102,16 @@ $(function() {
                 }
             },
 
+            // Display the event request form
+            '#event-request': function () {
+                if (isAuthenticated) {
+                    renderEventRequest();
+                } else {
+                    // Redirect to home page
+                    window.location.hash = '#';
+                }
+            },
+
             // Display contacts
             /*
             '#contacts': function () {
@@ -233,6 +243,12 @@ $(function() {
                 $('#week-list').append(eventList);
             }
         });
+    }
+
+    // renders the event request form
+    function renderEventRequest() {
+        setActiveNav('#event-request-nav');
+        $('#event-request').show();
     }
 
 

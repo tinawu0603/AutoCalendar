@@ -34,6 +34,7 @@
                 <li id='inbox-nav'><a href="#inbox">Inbox</a></li>
                 <li id='month-nav'><a href="#month">Month</a></li>
                 <li id='week-nav'><a href="#week">7 Days</a></li>
+                <li id='event-request-nav'><a href="#event-request">Event Request</a></li>
                 <!-- <li id='contacts-nav'><a href="#contacts">Contacts</a></li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right authed-nav">
@@ -123,6 +124,63 @@
         <div id="week-status" class="panel-body">
         </div>
         <div class="list-group" id="week-list">
+        </div>
+    </div>
+
+    <!-- Input new event -->
+    <div id="event-request" class="page panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Event Request Form</h1>
+        </div>
+        <div id="request-form" class="panel-body">
+            <form width="50%">
+                <div class="form-group">
+                    <label for="eventTypeSelect">Event Type</label>
+                    <select class="form-control" id="eventTypeSelect">
+                        <option>Select Event Type</option>
+                        <option>Laptop Registration</option>
+                        <option>SAFE Class</option>
+                        <option>SAT 101 (Situational Awareness Training)</option>
+                        <option>Table Event</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="datetimepicker">Event Time</label>
+                    <div class="input-group date" id="datetimepicker">
+                        <input type="text" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker').datetimepicker();
+                        });
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label for="locationInput">Event Location</label>
+                    <input type="text" class="form-control" id="locationInput" aria-describedby="locationHelp" placeholder="Event Location">
+                    <small id="locationHelp" class="form-text text-muted">Please enter "TBD" if location is unknown.</small>
+                </div>
+                <div class="form-group">
+                    <label for="nameInput">Your Name</label>
+                    <input type="text" class="form-control" id="nameInput" placeholder="Enter your first and last name">
+                </div>
+                <div class="form-group">
+                    <label for="emailInput">Your Email</label>
+                    <input type="email" class="form-control" id="emailInput"
+                           placeholder="Enter your email (e.g. king@husky.neu.edu, husky@northeastern.edu)">
+                </div>
+                <div class="form-group">
+                    <label for="commentTextArea">Additional Comments</label>
+                    <textarea class="form-control" id="commentTextArea" rows="3"></textarea>
+                </div>
+                <br>
+                <br>
+                <button type="button" class="btn btn-secondary btn-lg">Submit Form</button>
+            </form>
         </div>
     </div>
 
