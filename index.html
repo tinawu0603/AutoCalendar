@@ -32,8 +32,8 @@
             <ul class="nav navbar-nav authed-nav">
                 <li id='home-nav'><a href="#">Home</a></li>
                 <li id='inbox-nav'><a href="#inbox">Inbox</a></li>
-                <li id='calendar-nav'><a href="#calendar">Calendar</a></li>
-                <li id='event-table-nav'><a href="#event-table">Events Table</a></li>
+                <li id='month-nav'><a href="#month">Month</a></li>
+                <li id='week-nav'><a href="#week">7 Days</a></li>
                 <!-- <li id='contacts-nav'><a href="#contacts">Contacts</a></li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right authed-nav">
@@ -104,34 +104,25 @@
         </div>
     </div>
 
-    <!-- calendar display -->
-    <div id="calendar" class="page panel panel-default">
+    <!-- calendar events this month display -->
+    <div id="month" class="page panel panel-default">
         <div class="panel-heading">
-            <h1 class="panel-title">Calendar</h1>
+            <h1 class="panel-title">Month</h1>
         </div>
-        <div id="calendar-status" class="panel-body">
+        <div id="month-status" class="panel-body">
         </div>
-        <div class="list-group" id="event-list">
+        <div class="list-group" id="month-list">
         </div>
     </div>
 
-    <!-- event table display -->
-    <div id="event-table" class="page panel panel-default">
+    <!-- calendar events in the next 7 days including today display -->
+    <div id="week" class="page panel panel-default">
         <div class="panel-heading">
-            <h1 class="panel-title">Events Table</h1>
+            <h1 class="panel-title">7 Days</h1>
         </div>
-        <div id="event-table-body" class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Event Name</th>
-                    <th>Date and Time</th>
-                    <th>Location</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-
-            </table>
+        <div id="week-status" class="panel-body">
+        </div>
+        <div class="list-group" id="week-list">
         </div>
     </div>
 

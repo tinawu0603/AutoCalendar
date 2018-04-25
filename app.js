@@ -5,6 +5,9 @@ $(function() {
     var appId = '3be8622a-f6a4-491c-afe3-8861f2c6e230';
     var scopes = 'openid profile User.Read Mail.Read Calendars.Read Calendars.Read.Shared Calendars.ReadWrite Calendars.ReadWrite.Shared Contacts.Read';
 
+    // Variables for calendar IDs
+    const tina_calendar = "AAMkADBjNTQyNDhjLWI0ZDAtNGFlMi1hYTI0LWY3MmY0MDllODYyMwBGAAAAAAB1nFXEGydgS6wfYdh8ts1aBwAgPukuwqLaRLsUY6FAAGy-AAAAdlUNAABKsb9HdbhuQYupNwxFHBN9AAAAABjdAAA=";
+
     // Check for browser support for sessionStorage
     if (typeof(Storage) === 'undefined') {
         render('#unsupportedbrowser');
@@ -79,10 +82,20 @@ $(function() {
                 }
             },
 
-            // Display calendar
-            '#calendar': function () {
+            // Display events happening in this month
+            '#month': function () {
                 if (isAuthenticated) {
-                    renderCalendar();
+                    renderMonth();
+                } else {
+                    // Redirect to home page
+                    window.location.hash = '#';
+                }
+            },
+
+            // Display events happening in the next 7 days including today
+            '#week': function () {
+                if (isAuthenticated) {
+                    renderWeek();
                 } else {
                     // Redirect to home page
                     window.location.hash = '#';
@@ -180,26 +193,49 @@ $(function() {
         });
     }
 
-    function renderCalendar() {
+    // renders the events happening this month
+    function renderMonth() {
+        setActiveNav('#month-nav');
+        $('#month-status').text('Loading...');
+        $('#month-list').empty();
+        $('#month').show();
 
-        setActiveNav('#calendar-nav');
-        $('#calendar-status').text('Loading...');
-        $('#event-list').empty();
-        $('#calendar').show();
-
-        getUserEvents(function(events, error){
+        getUserMonthEvents(function(events, error){
             if (error) {
-                renderError('getUserEvents failed', error);
+                renderError('getUserMonthEvents failed', error);
             } else {
-                $('#calendar-status').text('Here are the 10 most recent events on your calendar.');
+                $('#month-status').text('Here are all the events on your calendar this month.');
                 var templateSource = $('#event-list-template').html();
                 var template = Handlebars.compile(templateSource);
 
                 var eventList = template({events: events});
-                $('#event-list').append(eventList);
+                $('#month-list').append(eventList);
             }
         });
     }
+
+    // renders the events happening in the next 7 days including today
+    function renderWeek() {
+        setActiveNav('#week-nav');
+        $('#week-status').text('Loading...');
+        $('#week-list').empty();
+        $('#week').show();
+
+        getUserWeekEvents(function(events, error){
+            if (error) {
+                renderError('getUserWeekEvents failed', error);
+            } else {
+                $('#week-status').text('Here are all the events on your calendar in the next 7 days including today.');
+                var templateSource = $('#event-list-template').html();
+                var template = Handlebars.compile(templateSource);
+
+                var eventList = template({events: events});
+                $('#week-list').append(eventList);
+            }
+        });
+    }
+
+
 
     /*
     function renderContacts() {
@@ -422,7 +458,8 @@ $(function() {
         });
     }
 
-    function getUserEvents(callback) {
+    // Gets the list of events in this month
+    function getUserMonthEvents(callback) {
         getAccessToken(function(accessToken) {
             if (accessToken) {
                 // Create a Graph client
@@ -433,13 +470,42 @@ $(function() {
                     }
                 });
 
-                const tina_calendar = "AAMkADBjNTQyNDhjLWI0ZDAtNGFlMi1hYTI0LWY3MmY0MDllODYyMwBGAAAAAAB1nFXEGydgS6wfYdh8ts1aBwAgPukuwqLaRLsUY6FAAGy-AAAAdlUNAABKsb9HdbhuQYupNwxFHBN9AAAAABjdAAA=";
-                const start_date = "2017-04-01T01:00:00";
-                const end_date = "2018-04-30T23:00:00";
                 // Get the 10 newest events
                 client
-                    .api('/me/calendars/' + tina_calendar + '/calendarview?startDateTime=' + start_date +
-                    '&endDateTime=' + end_date)
+                    .api('/me/calendars/' + tina_calendar + '/calendarview?startDateTime=' + getMonthStart() +
+                    '&endDateTime=' + getMonthEnd())
+                    .select('subject,bodyPreview,start,end,location')
+                    //.orderby('start/dateTime DESC')
+                    .get((err, res) => {
+                        if (err) {
+                            callback(null, err);
+                        } else {
+                            callback(res.value);
+                        }
+                    });
+            } else {
+                var error = { responseText: 'Could not retrieve access token' };
+                callback(null, error);
+            }
+        });
+    }
+
+    // Gets the list of events in the next 7 days including today
+    function getUserWeekEvents(callback) {
+        getAccessToken(function(accessToken) {
+            if (accessToken) {
+                // Create a Graph client
+                var client = MicrosoftGraph.Client.init({
+                    authProvider: (done) => {
+                        // Just return the token
+                        done(null, accessToken);
+                    }
+                });
+
+                // Get the 10 newest events
+                client
+                    .api('/me/calendars/' + tina_calendar + '/calendarview?startDateTime=' + getWeekStart() +
+                        '&endDateTime=' + getWeekEnd())
                     .select('subject,bodyPreview,start,end,location')
                     //.orderby('start/dateTime DESC')
                     .get((err, res) => {
@@ -551,15 +617,59 @@ $(function() {
         var today = new Date();
         var mm = today.getMonth() + 1;
         var yyyy = today.getFullYear();
-        return yyyy + '-' + mm + '-31T23:00:00';
+        var months = [1, 3, 5, 7, 8, 10, 12];
+        if (mm == 2) {
+            var dd = "28";
+        } else if (months.includes(mm)) {
+            var dd = "31";
+        } else {
+            var dd = "30";
+        }
+        return yyyy + '-' + mm + '-' + dd + 'T23:00:00';
     }
 
     function getWeekStart() {
-        
-
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        return yyyy + '-' + mm + '-' + dd + 'T01:00:00';
     }
 
+    // + 7 days ahead
     function getWeekEnd() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 22) {
+            // no wrap-around to the next month
+            return yyyy + '-' + mm + '-' + (dd + 6) + 'T23:00:00';
+        } else {
+            var months = [1, 3, 5, 7, 8, 10, 12];
+            // wrap-around to the next month
+            if (mm == 12) {
+                mm == 1;
+            } else {
+                mm += 1;
+            }
+            // months that have 31 days
+            if (mm == 2 && (dd + 6 > 28)) {
+                var new_date = dd + 6 - 28;
+                return yyyy + '-' + mm + '-' + new_date + 'T23:00:00';
+            } else if (months.includes(mm) && (dd + 6 > 31)) {
+                var new_date = dd + 6 - 31;
+                return yyyy + '-' + mm + '-' + new_date + 'T23:00:00';
+            } else if (!months.includes(mm) && (dd + 6 > 30)){
+                var new_date = dd + 6 - 30;
+                return yyyy + '-' + mm + '-' + new_date + 'T23:00:00';
+            } else {
+                return yyyy + '-' + mm + '-' + (dd + 6) + 'T23:00:00';
+            }
+
+        }
+
+
 
     }
 });
