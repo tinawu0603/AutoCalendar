@@ -198,6 +198,7 @@ $(function() {
         });
     }
 
+    /*
     function renderContacts() {
         setActiveNav('#contacts-nav');
         $('#contacts-status').text('Loading...');
@@ -217,6 +218,7 @@ $(function() {
             }
         });
     }
+    */
 
     // OAUTH FUNCTIONS =============================
 
