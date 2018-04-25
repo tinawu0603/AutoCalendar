@@ -3,7 +3,7 @@ $(function() {
     var authEndpoint = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?';
     var redirectUri = 'http://localhost:8080';
     var appId = '3be8622a-f6a4-491c-afe3-8861f2c6e230';
-    var scopes = 'openid profile User.Read Mail.Read Calendars.Read Contacts.Read';
+    var scopes = 'openid profile User.Read Mail.Read Calendars.Read Calendars.Read.Shared Calendars.ReadWrite Calendars.ReadWrite.Shared Contacts.Read';
 
     // Check for browser support for sessionStorage
     if (typeof(Storage) === 'undefined') {
@@ -90,6 +90,7 @@ $(function() {
             },
 
             // Display contacts
+            /*
             '#contacts': function () {
                 if (isAuthenticated) {
                     renderContacts();
@@ -98,6 +99,7 @@ $(function() {
                     window.location.hash = '#';
                 }
             },
+            */
 
             // Shown if browser doesn't support session storage
             '#unsupportedbrowser': function () {
@@ -179,6 +181,7 @@ $(function() {
     }
 
     function renderCalendar() {
+
         setActiveNav('#calendar-nav');
         $('#calendar-status').text('Loading...');
         $('#event-list').empty();
@@ -188,7 +191,7 @@ $(function() {
             if (error) {
                 renderError('getUserEvents failed', error);
             } else {
-                $('#calendar-status').text('Here are the 10 most recently created events on your calendar.');
+                $('#calendar-status').text('Here are the 10 most recent events on your calendar.');
                 var templateSource = $('#event-list-template').html();
                 var template = Handlebars.compile(templateSource);
 
@@ -430,12 +433,15 @@ $(function() {
                     }
                 });
 
+                const tina_calendar = "AAMkADBjNTQyNDhjLWI0ZDAtNGFlMi1hYTI0LWY3MmY0MDllODYyMwBGAAAAAAB1nFXEGydgS6wfYdh8ts1aBwAgPukuwqLaRLsUY6FAAGy-AAAAdlUNAABKsb9HdbhuQYupNwxFHBN9AAAAABjdAAA=";
+                const start_date = "2017-04-01T01:00:00";
+                const end_date = "2018-04-30T23:00:00";
                 // Get the 10 newest events
                 client
-                    .api('/me/events')
-                    .top(10)
-                    .select('subject,start,end,createdDateTime')
-                    .orderby('createdDateTime DESC')
+                    .api('/me/calendars/' + tina_calendar + '/calendarview?startDateTime=' + start_date +
+                    '&endDateTime=' + end_date)
+                    .select('subject,bodyPreview,start,end,location')
+                    //.orderby('start/dateTime DESC')
                     .get((err, res) => {
                         if (err) {
                             callback(null, err);

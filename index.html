@@ -33,6 +33,7 @@
                 <li id='home-nav'><a href="#">Home</a></li>
                 <li id='inbox-nav'><a href="#inbox">Inbox</a></li>
                 <li id='calendar-nav'><a href="#calendar">Calendar</a></li>
+                <li id='event-table-nav'><a href="#event-table">Events Table</a></li>
                 <!-- <li id='contacts-nav'><a href="#contacts">Contacts</a></li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right authed-nav">
@@ -45,13 +46,16 @@
 <div class="container main-container">
     <div id="signin-prompt" class="jumbotron page">
         <h1>AutoCalendar</h1>
-        <p>This project is to streamline the calendar process of the Crime Prevention and Community Engagement Unit.\n
-            Future updates will include:\n</p>
+        <p>This project is to streamline the calendar process of the Crime Prevention and Community Engagement Unit.
+            <br>
+            <br>
+            Future updates will include:</p>
         <ul>
             <li>Database for all event requests</li>
             <li>Sorting based on dates, event types, requesters, etc.</li>
             <li>Create charts and tables for data visualization</li>
         </ul>
+        <br>
         <p>
             <a class="btn btn-lg btn-primary" href="#" role="button" id="connect-button">Sign in for access</a>
         </p>
@@ -111,6 +115,26 @@
         </div>
     </div>
 
+    <!-- event table display -->
+    <div id="event-table" class="page panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Events Table</h1>
+        </div>
+        <div id="event-table-body" class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date and Time</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
     <!-- contacts display -->
     <!--
     <div id="contacts" class="page panel panel-default">
@@ -155,9 +179,10 @@
 <script id="event-list-template" type="text/x-handlebars-template">
     {{#each events}}
     <div class="list-group-item">
-        <h4 id="event-subject" class="list-group-item-heading">{{this.subject}}</h4>
-        <p id="event-start" class="list-group-item-heading">Start: {{formatDate this.start.dateTime}}</p>
-        <p id="event-end" class="list-group-item-heading">End: {{formatDate this.end.dateTime}}</p>
+        <h3 id="event-subject" class="list-group-item-heading">{{this.subject}}</h3>
+        <p id="event-time" class="list-group-item-heading">Time: {{formatDate this.start.dateTime}} - {{formatDate this.end.dateTime}}</p>
+        <p id="event-location" class="list-group-item-heading">Location: {{this.location.displayName}}</p>
+        <p id="event-details" class="list-group-item-heading">Event Details: {{this.bodyPreview}}</p>
     </div>
     {{/each}}
 </script>
