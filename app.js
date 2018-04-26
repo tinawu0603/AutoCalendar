@@ -249,6 +249,33 @@ $(function() {
     function renderEventRequest() {
         setActiveNav('#event-request-nav');
         $('#event-request').show();
+        $("#requestForm").submit(function(event){
+            // cancels the form submission
+            event.preventDefault();
+            submitForm();
+        });
+    }
+
+    function submitForm(){
+        // Initiate Variables With Form Content
+        var name = $("#nameInput").val();
+        var email = $("#emailInput").val();
+        var message = $("#eventTypeSelect").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/php/process.php",
+            data: "name=" + name + "&email=" + email + "&message=" + message,
+            success : function(text){
+                if (text == "success"){
+                    formSuccess();
+                }
+            }
+        });
+    }
+
+    function formSuccess(){
+        $( "#successSubmit" ).removeClass( "hidden" );
     }
 
 
