@@ -7,11 +7,13 @@
     <link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
     <link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/datetimepicker/latest/DateTimePicker.min.css" />
 
     <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
     <script src="//kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/datetimepicker/latest/DateTimePicker.min.js"></script>
     <script src="/graph-js-sdk-web.js"></script>
     <script src="/app.js"></script>
 </head>
@@ -133,7 +135,7 @@
             <h1 class="panel-title">Event Request Form</h1>
         </div>
         <div id="request-form" class="panel-body">
-            <form width="50%">
+            <form>
                 <div class="form-group">
                     <label for="eventTypeSelect">Event Type</label>
                     <select class="form-control" id="eventTypeSelect">
@@ -148,16 +150,11 @@
                 <div class="form-group">
                     <label for="datetimepicker">Event Time</label>
                     <div class="input-group date" id="datetimepicker">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" data-field="datetime" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker').datetimepicker();
-                        });
-                    </script>
                 </div>
                 <div class="form-group">
                     <label for="locationInput">Event Location</label>
@@ -179,8 +176,14 @@
                 </div>
                 <br>
                 <br>
-                <button type="button" class="btn btn-secondary btn-lg">Submit Form</button>
+                <button type="submit" id="formSubmit" class="btn btn-secondary btn-lg pull-center">Submit Form</button>
+                <div id="successSubmit" class="h3 text-center hidden">Event Request Submitted!</div>
             </form>
+            <script type="text/javascript">
+                $(function () {
+                    $('#datetimepicker').DateTimePicker();
+                });
+            </script>
         </div>
     </div>
 
