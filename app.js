@@ -249,10 +249,14 @@ $(function() {
     function renderEventRequest() {
         setActiveNav('#event-request-nav');
         $('#event-request').show();
-        $("#requestForm").submit(function(event){
-            // cancels the form submission
-            event.preventDefault();
-            submitForm();
+        $("#requestForm").validator().on("submit", function(event){
+            if (event.isDefaultPrevented()) {
+                // handle the invalid form...
+            } else {
+                // everything looks good!
+                event.preventDefault();
+                submitForm();
+            }
         });
     }
 
